@@ -3,8 +3,11 @@ import db.MyConnection;
 import empleados.ModuloEmpleados;
 import entity.Empleados;
 import java.sql.Connection;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import modelos.EmpleadosModel;
 
 /*
@@ -38,17 +41,47 @@ public class Bienvenida extends javax.swing.JFrame {
         Connection con = MyConnection.getConnection();
         Empleados emp = new Empleados(5,"Luis");
         EmpleadosModel modelo = new EmpleadosModel(con);
-        boolean res = modelo.agregar(emp);
+        /*boolean res = modelo.agregar(emp);
         if(res==true){
             JOptionPane.showMessageDialog(this, "Guardo Correctamente!");
         }else{
             JOptionPane.showMessageDialog(this, "Error al guardar");
-        }
+        }*/
+        ArrayList<Empleados> emps = modelo.obtenerTodos(); 
+        this.crearModelo();
+        this.volcarDatos(emps);
     }
     
     public Bienvenida(String _saludo){
         this.saludo = _saludo;
     }
+    
+    //crear modelo
+    public void crearModelo(){
+        tablaEmpleados = new JTable();
+        tablaEmpleados.setModel(
+            new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Codigo","Nombre", "Object"}
+            )
+        );
+        jScrollPane1.setViewportView(tablaEmpleados);
+        tablaEmpleados.removeColumn(tablaEmpleados.getColumn("Object"));
+    }
+    
+    //volcar datos
+public void volcarDatos(ArrayList<Empleados> empleados){
+        DefaultTableModel model = (DefaultTableModel) tablaEmpleados.getModel();
+        while(model.getRowCount()>0)model.removeRow(0);
+        for(Empleados e : empleados){
+            Object[] fila = {
+                e.getId(),
+                e.getName(),
+                e
+            };
+            model.addRow(fila);
+        }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -59,6 +92,14 @@ public class Bienvenida extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablaEmpleados = new javax.swing.JTable();
+        txtCodigo = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        txtNombre = new javax.swing.JTextField();
+        btnLimpiar = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -66,6 +107,37 @@ public class Bienvenida extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        tablaEmpleados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tablaEmpleados);
+
+        jLabel1.setText("Codigo Empleado:");
+
+        jLabel2.setText("Nombre:");
+
+        btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
+
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("Modulos");
 
@@ -91,11 +163,46 @@ public class Bienvenida extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(87, 87, 87)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(75, 75, 75)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCodigo)
+                            .addComponent(txtNombre)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnLimpiar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+                        .addComponent(btnGuardar)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 279, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(79, 79, 79)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(76, 76, 76)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnLimpiar)
+                            .addComponent(btnGuardar))))
+                .addContainerGap(161, Short.MAX_VALUE))
         );
 
         pack();
@@ -104,6 +211,27 @@ public class Bienvenida extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
        ModuloEmpleados me = new ModuloEmpleados();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        this.txtCodigo.setText("");
+        this.txtNombre.setText("");
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        int codigo = Integer.parseInt(this.txtCodigo.getText());
+        String name = this.txtNombre.getText();
+        Empleados e = new Empleados(codigo,name);
+        Connection con = MyConnection.getConnection();
+        EmpleadosModel modelo = new EmpleadosModel(con);
+        boolean res = modelo.agregar(e);
+        if(res==true){
+            JOptionPane.showMessageDialog(this, "Datos guardados!");
+            ArrayList<Empleados> emps = modelo.obtenerTodos();
+            volcarDatos(emps);
+        }else{
+            JOptionPane.showMessageDialog(this, "Error al guardar los datos");
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -141,10 +269,18 @@ public class Bienvenida extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnLimpiar;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tablaEmpleados;
+    private javax.swing.JTextField txtCodigo;
+    private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }

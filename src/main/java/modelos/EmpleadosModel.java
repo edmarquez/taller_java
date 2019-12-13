@@ -8,7 +8,9 @@ package modelos;
 import entity.Empleados;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -37,5 +39,28 @@ public class EmpleadosModel {
             //test
         }
         return false;
+    }
+    
+    public ArrayList<Empleados> obtenerTodos(){
+        ArrayList registros = new ArrayList<>();
+        PreparedStatement ps;
+        try{
+            ps=this.con.prepareStatement("SELECT * FROM Empleados");
+            ResultSet filas = ps.executeQuery();
+            if(filas!=null){
+                try{
+                    while(filas.next()){
+                        Empleados em = 
+                            new Empleados(filas.getInt("id"), filas.getString("name"));
+                        registros.add(em);
+                    }
+                }catch(SQLException ex){
+                    //test error
+                }
+            }
+        }catch(SQLException ex){
+            //exception
+        }
+        return registros;
     }
 }
