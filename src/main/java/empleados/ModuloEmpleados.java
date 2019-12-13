@@ -5,7 +5,10 @@
  */
 package empleados;
 
+import db.MyConnection;
+import java.sql.Connection;
 import javax.swing.JFrame;
+import modelos.EmpleadosModel;
 
 /**
  *
@@ -20,6 +23,8 @@ public class ModuloEmpleados extends javax.swing.JFrame {
         initComponents();
         this.setVisible(true);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        Connection con = MyConnection.getConnection();
+        EmpleadosModel emp = new EmpleadosModel(con);
     }
 
     /**

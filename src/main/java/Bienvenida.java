@@ -1,8 +1,11 @@
 
 import db.MyConnection;
 import empleados.ModuloEmpleados;
+import entity.Empleados;
 import java.sql.Connection;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import modelos.EmpleadosModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -33,6 +36,14 @@ public class Bienvenida extends javax.swing.JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setTitle("Taller JavaSE");
         Connection con = MyConnection.getConnection();
+        Empleados emp = new Empleados(5,"Luis");
+        EmpleadosModel modelo = new EmpleadosModel(con);
+        boolean res = modelo.agregar(emp);
+        if(res==true){
+            JOptionPane.showMessageDialog(this, "Guardo Correctamente!");
+        }else{
+            JOptionPane.showMessageDialog(this, "Error al guardar");
+        }
     }
     
     public Bienvenida(String _saludo){
