@@ -1,5 +1,7 @@
 
+import db.MyConnection;
 import empleados.ModuloEmpleados;
+import java.sql.Connection;
 import javax.swing.JFrame;
 
 /*
@@ -30,6 +32,7 @@ public class Bienvenida extends javax.swing.JFrame {
         initComponents();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setTitle("Taller JavaSE");
+        Connection con = MyConnection.getConnection();
     }
     
     public Bienvenida(String _saludo){
